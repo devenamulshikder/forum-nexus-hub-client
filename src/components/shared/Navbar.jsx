@@ -1,8 +1,13 @@
+/* eslint-disable no-unused-vars */
 import { Link, NavLink } from "react-router";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { IoIosNotificationsOutline } from "react-icons/io";
+import { AuthContext } from "../../provider/AuthProvider";
+import { Tooltip } from "react-tooltip";
+import { motion } from "framer-motion";
 
 export const Navbar = () => {
+  const { user, logOutUser } = use(AuthContext);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -17,6 +22,10 @@ export const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleLogOut = () => {
+    logOutUser();
+  };
 
   return (
     <div
@@ -71,11 +80,77 @@ export const Navbar = () => {
                 <IoIosNotificationsOutline size={30} />
               </button>
             </div>
-            <Link to={'/login'}>
-              <button className="text-white font-bold md:text-lg px-3 md:px-4 py-2 cursor-pointer rounded-[15px] bg-gradient-to-br from-[#6D7CFF] to-[#A167FF]">
-                Join Us
-              </button>
-            </Link>
+
+            {!user ? (
+              <div>
+                <Link to={"/login"}>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="button"
+                    className="text-white font-bold md:text-lg px-3 md:px-4 py-2 cursor-pointer rounded-[15px] bg-gradient-to-br from-[#6D7CFF] to-[#A167FF]"
+                  >
+                    Join Us
+                  </motion.button>
+                </Link>
+              </div>
+            ) : (
+              <>
+                <Tooltip
+                  id="profile-tooltip"
+                  place="bottom-end"
+                  style={{
+                    background:
+                      "linear-gradient(to bottom right, #6D7CFF, #A167FF)",
+                    color: "#fff",
+                    borderRadius: "8px",
+                    padding: "8px 12px",
+                    fontSize: "14px",
+                    fontWeight: "500",
+                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                  }}
+                />
+                <div className="dropdown dropdown-end">
+                  <div
+                    tabIndex={0}
+                    role="button"
+                    className="btn btn-ghost btn-circle avatar"
+                    data-tooltip-id="profile-tooltip"
+                    data-tooltip-content={user?.displayName || "User Profile"}
+                  >
+                    <div className="w-10 rounded-full">
+                      <img
+                        alt="user photo"
+                        referrerPolicy="no-referrer"
+                        src={user?.photoURL || "https://via.placeholder.com/40"}
+                      />
+                    </div>
+                  </div>
+                  <ul
+                    tabIndex={0}
+                    className="menu menu-sm dropdown-content bg-white rounded-box z-1 mt-3 w-40 p-2 shadow"
+                  >
+                    <p className="ml-2 text-gray-500">
+                      {user?.displayName || "User"}
+                    </p>
+                    <li>
+                      <Link to="/dashboard" className="text-[15px] font-medium">
+                        Dashboard
+                      </Link>
+                    </li>
+                    <li>
+                      <button
+                        onClick={handleLogOut}
+                        to="/dashboard"
+                        className="text-[15px] font-medium"
+                      >
+                        Sign Out
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
