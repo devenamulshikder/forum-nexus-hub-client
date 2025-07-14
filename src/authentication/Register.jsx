@@ -1,8 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
-import { Link } from "react-router";
-import { FaGoogle, FaFacebook } from "react-icons/fa";
+import { Link, useLocation, useNavigate } from "react-router";
+import { use } from "react"; // Replaced use with useContext
+import { AuthContext } from "../provider/AuthProvider";
+import { toast } from "sonner";
+import { FaSpinner } from "react-icons/fa";
 
 export const Register = () => {
   const {
@@ -10,10 +13,51 @@ export const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { createUser, updateUser, loading, setUser, setLoading, googleLogin } =
+    use(AuthContext); // Use useContext instead of use
 
   const onSubmit = (data) => {
-    console.log(data);
-    // Add your registration logic here
+    const { email, password, fullName, photoURL } = data; // Destructure form data
+    createUser(email, password)
+      .then((result) => {
+        const user = result.user;
+        return updateUser({ displayName: fullName, photoURL: photoURL || null }) // Use fullName and photoURL from form data
+          .then(() => {
+            setUser({
+              ...user,
+              displayName: fullName,
+              photoURL: photoURL || null,
+            });
+            toast.success("Registration successful!");
+            navigate(location?.state ? location.state : "/");
+          });
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        setLoading(false);
+      });
+  };
+
+  const handleGoogleLogin = () => {
+    googleLogin()
+      .then((result) => {
+        const user = result.user;
+        setUser(user);
+        toast.success("Google login successful!");
+        navigate(location?.state ? location.state : "/");
+      })
+      .catch((err) => {
+        toast.error(err.message);
+        setLoading(false);
+      });
+  };
+
+  const handleFacebookLogin = () => {
+    console.log("Facebook login clicked");
+    // Add your Facebook authentication logic here
+    toast.info("Facebook login not implemented yet.");
   };
 
   return (
@@ -177,7 +221,7 @@ export const Register = () => {
                   .split("Must")
                   .filter(Boolean)
                   .map((msg, i) => (
-                    <p key={i}>Must{msg}</p>
+                    <p key={i}>Must {msg}</p>
                   ))}
               </motion.div>
             )}
@@ -189,7 +233,13 @@ export const Register = () => {
             type="submit"
             className="w-full bg-gradient-to-br from-[#6D7CFF] to-[#A167FF] text-white py-3 px-4 rounded-lg font-semibold hover:opacity-90 transition-opacity mt-2"
           >
-            Create Account
+            {loading ? (
+              <span className="flex justify-center items-center">
+                <FaSpinner className="animate-spin" />
+              </span>
+            ) : (
+              "Create Account"
+            )}
           </motion.button>
 
           <div className="relative flex py-4 items-center">
@@ -198,25 +248,40 @@ export const Register = () => {
             <div className="flex-grow border-t border-gray-300"></div>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-5">
             <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               type="button"
-              className="flex-1 flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+              onClick={handleGoogleLogin}
+              className="w-full bg-gradient-to-br from-[#6D7CFF] to-[#A167FF] text-white py-3 px-4 rounded-lg font-semibold hover:opacity-90 transition-opacity flex items-center justify-center space-x-2"
             >
-              <FaGoogle className="text-red-500" />
-              Google
+              <svg
+                className="w-5 h-5"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M12.24 10.5v2.25h5.76c-.24 1.31-1.92 3.75-5.76 3.75-3.47 0-6.29-2.81-6.29-6.25s2.82-6.25 6.29-6.25c1.57 0 2.96.58 4.03 1.53l3.04-3.04C17.56 1.29 15.03 0 12.24 0 6.54 0 2 4.54 2 10.25s4.54 10.25 10.24 10.25c5.89 0 10.24-4.14 10.24-10.25 0-.65-.07-1.29-.18-1.91h-10.06z" />
+              </svg>
+              <span>With Google</span>
             </motion.button>
-
             <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               type="button"
-              className="flex-1 flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+              onClick={handleFacebookLogin}
+              className="w-full bg-gradient-to-br from-[#6D7CFF] to-[#A167FF] text-white py-3 px-4 rounded-lg font-semibold hover:opacity-90 transition-opacity flex items-center justify-center space-x-2"
             >
-              <FaFacebook className="text-blue-600" />
-              Facebook
+              <svg
+                className="w-5 h-5"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M22 12.07C22 6.54 17.46 2 12 2S2 6.54 2 12.07c0 5.01 3.66 9.18 8.44 9.94v-7.03h-2.54v-2.91h2.54v-2.22c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.89h2.78l-.44 2.91h-2.34v7.03C18.34 21.25 22 17.08 22 12.07z" />
+              </svg>
+              <span>With Facebook</span>
             </motion.button>
           </div>
         </form>
