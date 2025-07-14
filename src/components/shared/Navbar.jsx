@@ -1,5 +1,6 @@
 import { Link, NavLink } from "react-router";
 import { useEffect, useState } from "react";
+import { IoIosNotificationsOutline } from "react-icons/io";
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -65,7 +66,12 @@ export const Navbar = () => {
             </NavLink>
           </div>
           <div className="navbar-end">
-            <Link>
+            <div className="flex items-center justify-center mr-1 text-[#6D7CFF] hover:text-[#A167FF]">
+              <button className="cursor-pointer">
+                <IoIosNotificationsOutline size={30} />
+              </button>
+            </div>
+            <Link to={'/login'}>
               <button className="text-white font-bold md:text-lg px-3 md:px-4 py-2 cursor-pointer rounded-[15px] bg-gradient-to-br from-[#6D7CFF] to-[#A167FF]">
                 Join Us
               </button>
