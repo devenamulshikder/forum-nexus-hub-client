@@ -2,6 +2,7 @@
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
+import { FaFacebook, FaGoogle } from "react-icons/fa";
 
 export const Login = () => {
   const {
@@ -13,6 +14,16 @@ export const Login = () => {
   const onSubmit = (data) => {
     console.log(data);
     // Add your authentication logic here
+  };
+
+  const handleGoogleLogin = () => {
+    console.log("Google login clicked");
+    // Add Google authentication logic here
+  };
+
+  const handleFacebookLogin = () => {
+    console.log("Facebook login clicked");
+    // Add Facebook authentication logic here
   };
 
   return (
@@ -116,7 +127,6 @@ export const Login = () => {
               </motion.div>
             )}
           </div>
-
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
@@ -148,6 +158,33 @@ export const Login = () => {
           >
             Sign In
           </motion.button>
+          <div className="relative flex py-4 items-center">
+            <div className="flex-grow border-t border-gray-300"></div>
+            <span className="flex-shrink mx-4 text-gray-500">or</span>
+            <div className="flex-grow border-t border-gray-300"></div>
+          </div>
+          {/* Social Login Buttons */}
+          <div className="flex gap-4">
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              type="button"
+              className="flex-1 flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+            >
+              <FaGoogle className="text-red-500" />
+              Google
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              type="button"
+              className="flex-1 flex items-center justify-center gap-2 bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+            >
+              <FaFacebook className="text-blue-600" />
+              Facebook
+            </motion.button>
+          </div>
         </form>
 
         {/* Footer */}
