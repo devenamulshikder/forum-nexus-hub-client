@@ -2,12 +2,27 @@ import { use, useState } from "react";
 import { Outlet, Link, useLocation } from "react-router";
 import { FaUser, FaPlusCircle, FaList, FaSignOutAlt } from "react-icons/fa";
 import { AuthContext } from "../provider/AuthProvider";
+import {
+  MdOutlineKeyboardDoubleArrowLeft,
+  MdOutlineKeyboardDoubleArrowRight,
+} from "react-icons/md";
+import { DashboardWelcome } from "../components/dashboard/dashboardWelcome/DashboardWelcome";
+import { toast } from "sonner";
 
 const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const location = useLocation();
   const { user, logOutUser } = use(AuthContext);
-
+  // Handle logout
+  const handleLogOut = () => {
+    logOutUser()
+      .then(() => {
+        toast.success("Signed out successfully!");
+      })
+      .catch((error) => {
+        toast.error(`Logout failed: ${error.message}`);
+      });
+  };
   const navItems = [
     {
       path: "profile",
@@ -34,7 +49,7 @@ const DashboardLayout = () => {
           sidebarOpen ? "w-64" : "w-20"
         } bg-white shadow-md transition-all duration-300 flex flex-col`}
       >
-        <div className="p-4 flex items-center justify-between border-b">
+        <div className="p-4 flex items-center justify-between border-b border-gray-300">
           {sidebarOpen ? (
             <Link to={"/"}>
               <div className="flex items-center gap-2">
@@ -53,7 +68,11 @@ const DashboardLayout = () => {
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="text-gray-500 hover:text-[#6D7CFF]"
           >
-            {sidebarOpen ? "«" : "»"}
+            {sidebarOpen ? (
+              <MdOutlineKeyboardDoubleArrowLeft size={25} />
+            ) : (
+              <MdOutlineKeyboardDoubleArrowRight size={25} />
+            )}
           </button>
         </div>
 
@@ -76,7 +95,7 @@ const DashboardLayout = () => {
 
         <div className="p-4 border-t border-gray-300">
           <button
-            onClick={() => logOutUser()}
+            onClick={handleLogOut}
             className="flex items-center gap-3 w-full p-3 text-gray-600 hover:text-red-500 rounded-lg transition-colors"
           >
             <FaSignOutAlt className="text-lg" />
@@ -107,7 +126,11 @@ const DashboardLayout = () => {
 
         {/* Page Content */}
         <main className="p-6">
-          <Outlet />
+          {location.pathname === "/dashboard" ? (
+            <DashboardWelcome />
+          ) : (
+            <Outlet />
+          )}
         </main>
       </div>
     </div>
