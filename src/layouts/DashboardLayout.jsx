@@ -106,7 +106,7 @@ const DashboardLayout = () => {
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
         {/* Top Bar */}
-        <header className="bg-white shadow-sm p-4 flex justify-between items-center">
+        <header className="bg-white shadow-sm p-4 flex justify-between items-center sticky top-0">
           <h1 className="text-xl font-semibold text-gray-800">
             {navItems.find((item) => location.pathname.includes(item.path))
               ?.name || "Dashboard"}

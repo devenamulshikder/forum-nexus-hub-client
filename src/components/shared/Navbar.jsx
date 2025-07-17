@@ -5,6 +5,7 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import { AuthContext } from "../../provider/AuthProvider";
 import { Tooltip } from "react-tooltip";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 export const Navbar = () => {
   const { user, logOutUser } = use(AuthContext);
@@ -23,8 +24,15 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Handle logout
   const handleLogOut = () => {
-    logOutUser();
+    logOutUser()
+      .then(() => {
+        toast.success("Signed out successfully!");
+      })
+      .catch((error) => {
+        toast.error(`Logout failed: ${error.message}`);
+      });
   };
 
   return (

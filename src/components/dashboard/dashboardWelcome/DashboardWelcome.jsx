@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { Link } from "react-router";
 import Lottie from "lottie-react";
 import welcomeAnimation from "../../../../public/dashboardLotties/dashboard.json";
-import dashboardAnimation from "../../../../public/dashboardLotties/dashboard.json";
 
 export const DashboardWelcome = () => {
   return (
