@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import Root from "../layouts/Root";
-import { ErrorPage, Home, MyProfile } from "../pages";
+import { AddPost, ErrorPage, Home, MyProfile } from "../pages";
 import { Login, Register } from "../authentication";
 import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -35,7 +35,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "profile",
-        Component: MyProfile
+        Component: MyProfile,
+      },
+      {
+        path: "add-post",
+        Component: AddPost
       },
     ],
   },
