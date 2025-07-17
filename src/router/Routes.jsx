@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import Root from "../layouts/Root";
-import { AddPost, ErrorPage, Home, MyProfile } from "../pages";
+import { AddPost, ErrorPage, Home, MyPosts, MyProfile } from "../pages";
 import { Login, Register } from "../authentication";
 import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
@@ -39,7 +39,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "add-post",
-        Component: AddPost
+        Component: AddPost,
+      },
+      {
+        path: "my-posts",
+        Component: MyPosts,
       },
     ],
   },

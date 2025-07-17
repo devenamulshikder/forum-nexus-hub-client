@@ -10,6 +10,7 @@ import { FaPlusCircle, FaLock, FaCrown } from "react-icons/fa";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { AuthContext } from "../../provider/AuthProvider";
 import { Loader } from "../../components";
+import { toast } from "sonner";
 
 export const AddPost = () => {
   const { user } = use(AuthContext);
@@ -37,6 +38,7 @@ export const AddPost = () => {
   const mutation = useMutation({
     mutationFn: (newPost) => axiosSecure.post("/posts", newPost),
     onSuccess: () => {
+        toast.success('Your post published!')
       queryClient.invalidateQueries(["myPosts"]);
       reset();
       navigate("/dashboard/my-posts");
@@ -96,7 +98,7 @@ export const AddPost = () => {
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => navigate("/membership")}
-          className="w-full bg-gradient-to-br from-[#6D7CFF] to-[#A167FF] text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center gap-2"
+          className="w-full cursor-pointer bg-gradient-to-br from-[#6D7CFF] to-[#A167FF] text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center gap-2"
         >
           <FaCrown className="text-yellow-300" />
           Upgrade to Premium
