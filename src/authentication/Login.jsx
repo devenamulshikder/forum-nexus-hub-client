@@ -6,8 +6,10 @@ import { FaFacebook, FaGoogle, FaSpinner } from "react-icons/fa";
 import { use } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import { toast } from "sonner";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 export const Login = () => {
+  const axiosSecure = useAxiosSecure();
   const {
     register,
     handleSubmit,
@@ -17,33 +19,48 @@ export const Login = () => {
   const location = useLocation();
   const { signInUser, updateUser, loading, setUser, setLoading, googleLogin } =
     use(AuthContext);
-  const onSubmit = (data) => {
-    console.log(data);
-    // Add your authentication logic here
-    signInUser(data?.email, data?.password)
-      .then((result) => {
-        const user = result.user;
-        toast.success("Sign in user successfully!");
-        navigate(location?.state ? location?.state : "/");
-      })
-      .catch((err) => {
-        toast.error(err.message);
-         setLoading(false);
-      });
-  };
+  const onSubmit = async (data) => {
+    try {
+      setLoading(true);
+      const result = await signInUser(data?.email, data?.password);
+      const user = result.user;
 
-  const handleGoogleLogin = () => {
-    googleLogin()
-      .then((result) => {
-        const user = result.user;
-        setUser(user);
-        toast.success("Google login successful!");
-        navigate(location?.state ? location.state : "/");
-      })
-      .catch((err) => {
-        toast.error(err.message);
-        setLoading(false);
-      });
+      const saveUser = {
+        name: user.displayName || "Anonymous",
+        email: user.email,
+        photo: user.photoURL || null,
+        badge: "bronze",
+        isMember: false,
+      };
+
+      await axiosSecure.post("/users", saveUser);
+
+      toast.success("Sign in user successfully!");
+      navigate(location?.state ? location?.state : "/");
+    } catch (err) {
+      toast.error(err.message);
+      setLoading(false);
+    }
+  };
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await googleLogin();
+      const user = result.user;
+
+      const saveUser = {
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+        badge: "bronze",
+        isMember: false,
+      };
+      await axiosSecure.post("/users", saveUser);
+      toast.success("Login Successful");
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      toast.error("Google login failed!");
+    }
   };
 
   const handleFacebookLogin = () => {

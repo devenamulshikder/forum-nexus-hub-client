@@ -6,8 +6,10 @@ import { use } from "react"; // Replaced use with useContext
 import { AuthContext } from "../provider/AuthProvider";
 import { toast } from "sonner";
 import { FaSpinner } from "react-icons/fa";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 export const Register = () => {
+  const axiosSecure = useAxiosSecure()
   const {
     register,
     handleSubmit,
@@ -16,42 +18,64 @@ export const Register = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { createUser, updateUser, loading, setUser, setLoading, googleLogin } =
-    use(AuthContext); // Use useContext instead of use
+    use(AuthContext);
 
-  const onSubmit = (data) => {
-    const { email, password, fullName, photoURL } = data; // Destructure form data
-    createUser(email, password)
-      .then((result) => {
-        const user = result.user;
-        return updateUser({ displayName: fullName, photoURL: photoURL || null }) // Use fullName and photoURL from form data
-          .then(() => {
-            setUser({
-              ...user,
-              displayName: fullName,
-              photoURL: photoURL || null,
-            });
-            toast.success("Registration successful!");
-            navigate(location?.state ? location.state : "/");
-          });
-      })
-      .catch((err) => {
-        toast.error(err.message);
-        setLoading(false);
+  const onSubmit = async (data) => {
+    const { fullName, email, password, photoURL } = data;
+
+    try {
+      setLoading(true);
+      const userCredential = await createUser(email, password);
+      const user = userCredential.user;
+
+      // Update Firebase profile
+      await updateUser(user, {
+        displayName: fullName,
+        photo: photoURL,
       });
+
+      // Save to MongoDB
+      const saveUser = {
+        name: fullName,
+        email: email,
+        photo: photoURL || null,
+        badge: "bronze",
+        isMember: false,
+      };
+
+      await axiosSecure.post("/users", saveUser);
+
+      toast.success("Registered successfully!");
+      navigate(location?.state ? location?.state : "/");
+    } catch (error) {
+      console.error(error);
+      toast.error("Registration failed!");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleGoogleLogin = () => {
-    googleLogin()
-      .then((result) => {
-        const user = result.user;
-        setUser(user);
-        toast.success("Google login successful!");
-        navigate(location?.state ? location.state : "/");
-      })
-      .catch((err) => {
-        toast.error(err.message);
-        setLoading(false);
-      });
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await googleLogin();
+      const user = result.user;
+
+      const saveUser = {
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+        badge: "bronze",
+        isMember: false,
+      };
+
+      await axiosSecure.post("/users", saveUser);
+
+      toast.success("Login Successful");
+      navigate(location?.state ? location?.state : "/");
+    } catch (error) {
+      console.error(error);
+      toast.error("Google login failed!");
+    }
   };
 
   const handleFacebookLogin = () => {
