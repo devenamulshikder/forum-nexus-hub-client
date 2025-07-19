@@ -34,7 +34,6 @@ const DashboardLayout = () => {
       return res.data;
     },
   });
-  console.log(userInfo);
   // Handle logout
   const handleLogOut = () => {
     logOutUser()

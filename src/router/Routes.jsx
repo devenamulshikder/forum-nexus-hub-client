@@ -1,9 +1,17 @@
 import { createBrowserRouter } from "react-router";
 import Root from "../layouts/Root";
-import { AddPost, ErrorPage, Home, MyPosts, MyProfile } from "../pages";
+import {
+  AddPost,
+  AdminProfile,
+  ErrorPage,
+  Home,
+  MyPosts,
+  MyProfile,
+} from "../pages";
 import { Login, Register } from "../authentication";
 import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
+import AdminRoute from "./AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +52,14 @@ export const router = createBrowserRouter([
       {
         path: "my-posts",
         Component: MyPosts,
+      },
+      {
+        path: "admin-profile",
+        element: (
+          <AdminRoute>
+            <AdminProfile />
+          </AdminRoute>
+        ),
       },
     ],
   },

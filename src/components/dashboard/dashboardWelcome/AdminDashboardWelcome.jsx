@@ -54,7 +54,7 @@ export const AdminDashboardWelcome = () => {
             icon: <FaUserShield className="text-4xl text-[#A167FF]" />,
             title: "Admin Profile",
             desc: "View your admin statistics and site metrics",
-            path: "profile",
+            path: "admin-profile",
           },
           {
             icon: (
