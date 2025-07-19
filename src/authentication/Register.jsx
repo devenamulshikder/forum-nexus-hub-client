@@ -2,14 +2,14 @@
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router";
-import { use } from "react"; // Replaced use with useContext
+import { use } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import { toast } from "sonner";
 import { FaSpinner } from "react-icons/fa";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 
 export const Register = () => {
-  const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
   const {
     register,
     handleSubmit,
@@ -41,6 +41,7 @@ export const Register = () => {
         photo: photoURL || null,
         badge: "bronze",
         isMember: false,
+        role: "user",
       };
 
       await axiosSecure.post("/users", saveUser);
@@ -66,6 +67,7 @@ export const Register = () => {
         photo: user.photoURL,
         badge: "bronze",
         isMember: false,
+        role: "user",
       };
 
       await axiosSecure.post("/users", saveUser);

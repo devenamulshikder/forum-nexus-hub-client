@@ -31,6 +31,7 @@ export const Login = () => {
         photo: user.photoURL || null,
         badge: "bronze",
         isMember: false,
+        role:'user'
       };
 
       await axiosSecure.post("/users", saveUser);
@@ -53,6 +54,7 @@ export const Login = () => {
         photo: user.photoURL,
         badge: "bronze",
         isMember: false,
+        role:'user'
       };
       await axiosSecure.post("/users", saveUser);
       toast.success("Login Successful");
