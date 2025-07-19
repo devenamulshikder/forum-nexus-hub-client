@@ -42,6 +42,7 @@ export const Register = () => {
         badge: "bronze",
         isMember: false,
         role: "user",
+        isAdmin: false,
       };
 
       await axiosSecure.post("/users", saveUser);
@@ -68,10 +69,9 @@ export const Register = () => {
         badge: "bronze",
         isMember: false,
         role: "user",
+        isAdmin: false,
       };
-
       await axiosSecure.post("/users", saveUser);
-
       toast.success("Login Successful");
       navigate(location?.state ? location?.state : "/");
     } catch (error) {
