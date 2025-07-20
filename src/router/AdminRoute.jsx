@@ -4,11 +4,11 @@ import { Loader } from "../components";
 import { AuthContext } from "../provider/AuthProvider";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
-
 const AdminRoute = ({ children }) => {
   const { user, loading } = use(AuthContext);
   const axiosSecure = useAxiosSecure();
-  const { data: userInfo = {} } = useQuery({
+  const location = useLocation();
+  const { data: userInfo, isLoading: userInfoLoading } = useQuery({
     queryKey: ["userInfo", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
@@ -16,14 +16,12 @@ const AdminRoute = ({ children }) => {
       return res.data;
     },
   });
-  const location = useLocation();
-  if (loading) {
+  if (loading || userInfoLoading) {
     return <Loader />;
   }
-  if (!userInfo?.role==='admin') {
+  if (!user || userInfo?.role !== "admin") {
     return <Navigate to="/dashboard" state={{ from: location }} replace />;
   }
   return children;
 };
-
 export default AdminRoute;
