@@ -65,9 +65,9 @@ export const ManageUsers = () => {
       setActionLoading(null);
     }
   };
-  if (isLoading) {
-    return <Loader />;
-  }
+//   if (isLoading) {
+//     return <Loader />;
+//   }
   return (
     <motion.div
       initial={{ opacity: 0 }}

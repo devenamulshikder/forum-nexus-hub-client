@@ -5,6 +5,7 @@ import {
   AdminProfile,
   ErrorPage,
   Home,
+  MakeAnnouncement,
   ManageUsers,
   MyPosts,
   MyProfile,
@@ -69,6 +70,12 @@ export const router = createBrowserRouter([
             <ManageUsers />
           </AdminRoute>
         ),
+      },
+      {
+        path: "make-announcement",
+        element: <AdminRoute>
+          <MakeAnnouncement/>
+        </AdminRoute>
       },
     ],
   },

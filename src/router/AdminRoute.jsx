@@ -20,10 +20,9 @@ const AdminRoute = ({ children }) => {
   if (loading) {
     return <Loader />;
   }
-  if (!userInfo?.isAdmin) {
+  if (!userInfo?.role==='admin') {
     return <Navigate to="/dashboard" state={{ from: location }} replace />;
   }
-
   return children;
 };
 

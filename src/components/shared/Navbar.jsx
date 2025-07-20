@@ -65,8 +65,8 @@ export const Navbar = () => {
               to="/"
               className={({ isActive }) =>
                 isActive
-                  ? "text-xl font-semibold bg-gradient-to-br from-[#6D7CFF] to-[#635BFF] bg-clip-text text-transparent border-b-2 border-[#6D7CFF]"
-                  : "text-xl text-gray-500 font-semibold relative after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-[#6D7CFF] after:transition-all after:duration-300 hover:after:w-full"
+                  ? "text-lg font-semibold bg-gradient-to-br from-[#6D7CFF] to-[#635BFF] bg-clip-text text-transparent border-b-2 border-[#6D7CFF]"
+                  : "text-lg text-gray-500 font-semibold relative after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-[#6D7CFF] after:transition-all after:duration-300 hover:after:w-full"
               }
             >
               Home
@@ -75,8 +75,8 @@ export const Navbar = () => {
               to="/membership"
               className={({ isActive }) =>
                 isActive
-                  ? "text-xl font-semibold bg-gradient-to-br from-[#6D7CFF] to-[#635BFF] bg-clip-text text-transparent border-b-2 border-[#6D7CFF]"
-                  : "text-xl text-gray-500 font-semibold relative after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-[#6D7CFF] after:transition-all after:duration-300 hover:after:w-full"
+                  ? "text-lg font-semibold bg-gradient-to-br from-[#6D7CFF] to-[#635BFF] bg-clip-text text-transparent border-b-2 border-[#6D7CFF]"
+                  : "text-lg text-gray-500 font-semibold relative after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-[#6D7CFF] after:transition-all after:duration-300 hover:after:w-full"
               }
             >
               Membership
@@ -84,9 +84,11 @@ export const Navbar = () => {
           </div>
           <div className="navbar-end">
             <div className="flex items-center justify-center mr-1 text-[#6D7CFF] hover:text-[#A167FF]">
-              <button className="cursor-pointer">
-                <IoIosNotificationsOutline size={30} />
-              </button>
+              {user && (
+                <button className="cursor-pointer">
+                  <IoIosNotificationsOutline size={30} />
+                </button>
+              )}
             </div>
 
             {!user ? (
