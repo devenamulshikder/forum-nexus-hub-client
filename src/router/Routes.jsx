@@ -5,6 +5,7 @@ import {
   AdminProfile,
   ErrorPage,
   Home,
+  ManageUsers,
   MyPosts,
   MyProfile,
 } from "../pages";
@@ -58,6 +59,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <AdminProfile />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manage-users",
+        element: (
+          <AdminRoute>
+            <ManageUsers />
           </AdminRoute>
         ),
       },
