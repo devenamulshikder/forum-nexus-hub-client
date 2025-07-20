@@ -6,11 +6,13 @@ import { AuthContext } from "../../provider/AuthProvider";
 import { Tooltip } from "react-tooltip";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 export const Navbar = () => {
   const { user, logOutUser } = use(AuthContext);
   const [isScrolled, setIsScrolled] = useState(false);
-
+  const axiosSecure = useAxiosSecure();
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -35,6 +37,14 @@ export const Navbar = () => {
       });
   };
 
+  const { data: countData } = useQuery({
+    queryKey: ["announcementCount"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/announcements/count");
+      return res.data;
+    },
+  });
+  const count = countData?.count || 0;
   return (
     <div
       className={`shadow-sm top-0 sticky z-50 transition-all duration-300 ${
@@ -83,14 +93,18 @@ export const Navbar = () => {
             </NavLink>
           </div>
           <div className="navbar-end">
-            <div className="flex items-center justify-center mr-1 text-[#6D7CFF] hover:text-[#A167FF]">
+            <div className="relative flex items-center justify-center mr-1 text-[#6D7CFF] hover:text-[#A167FF]">
               {user && (
                 <button className="cursor-pointer">
                   <IoIosNotificationsOutline size={30} />
+                  {count > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs px-1.5 rounded-full">
+                      {count}
+                    </span>
+                  )}
                 </button>
               )}
             </div>
-
             {!user ? (
               <div>
                 <Link to={"/login"}>

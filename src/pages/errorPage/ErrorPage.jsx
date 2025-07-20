@@ -31,10 +31,10 @@ export const ErrorPage = () => {
             Return to Forum
           </Link>
           <Link
-            to="/create-thread"
+            to={-1}
             className="text-[#6D7CFF] font-bold text-lg px-6 py-3 cursor-pointer rounded-[15px] border-2 border-[#6D7CFF] hover:bg-gray-50 transition-colors"
           >
-            Start New Discussion
+            Back to Discussion
           </Link>
         </div>
       </div>
