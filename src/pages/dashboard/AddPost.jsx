@@ -38,7 +38,7 @@ export const AddPost = () => {
   const mutation = useMutation({
     mutationFn: (newPost) => axiosSecure.post("/posts", newPost),
     onSuccess: () => {
-        toast.success('Your post published!')
+      toast.success("Your post published!");
       queryClient.invalidateQueries(["myPosts"]);
       reset();
       navigate("/dashboard/my-posts");
@@ -58,20 +58,18 @@ export const AddPost = () => {
     await mutation.mutateAsync(post);
   };
 
-  const tagOptions = [
-    { value: "javascript", label: "JavaScript" },
-    { value: "react", label: "React" },
-    { value: "nodejs", label: "Node.js" },
-    { value: "mongodb", label: "MongoDB" },
-    { value: "frontend", label: "Frontend" },
-    { value: "backend", label: "Backend" },
-    { value: "angularjs", label: "AngularJS" },
-    { value: "nextjs", label: "Next.JS" },
-    { value: "python", label: "Python" },
-    { value: "typescript", label: "Typescript" },
-    { value: "api", label: "API" },
-    { value: "css", label: "CSS" },
-];
+  const { data: allTags = [] } = useQuery({
+    queryKey: ["tags"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/tags");
+      return res.data;
+    },
+  });
+
+  const tagOptions = allTags.map((tag) => ({
+    label: tag.name,
+    value: tag.name,
+  }));
 
   if (isLoading) {
     return <Loader />;
