@@ -14,7 +14,7 @@ export const AnnouncementList = () => {
   if (!announcements.length) return null;
 
   return (
-    <div className="max-w-3xl mx-auto my-6">
+    <div className="my-6">
       <h3 className="text-xl font-bold mb-4">Latest Announcements</h3>
       <div className="space-y-4">
         {announcements.map((a) => (

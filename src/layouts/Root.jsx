@@ -1,13 +1,23 @@
-import React from "react";
+import React, { use } from "react";
 import { Outlet } from "react-router";
-import { Footer, Navbar } from "../components";
+import { Footer, Loader, Navbar } from "../components";
+import { AuthContext } from "../provider/AuthProvider";
 
 const Root = () => {
+  const { loading } = use(AuthContext);
   return (
     <div>
-      <Navbar />
-      <Outlet />
-      <Footer />
+      {loading ? (
+        <div className="flex items-center justify-center h-screen">
+          <Loader />
+        </div>
+      ) : (
+        <>
+          <Navbar />
+          <Outlet />
+          <Footer />
+        </>
+      )}
     </div>
   );
 };
