@@ -14,6 +14,7 @@ import { Login, Register } from "../authentication";
 import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 import AdminRoute from "./AdminRoute";
+import PostDetails from "../pages/postDetails/PostDetails";
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,12 @@ export const router = createBrowserRouter([
         path: "/register",
         Component: Register,
       },
+      {
+        path: "/post/:id",
+        element:<PrivateRoute>
+          <PostDetails/>
+        </PrivateRoute>
+      }
     ],
   },
   {
