@@ -10,6 +10,7 @@ import {
   FaThumbsUp,
   FaThumbsDown,
   FaComment,
+  FaRegSadTear,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { TagsSection } from "../tagsSection/TagsSection";
@@ -47,12 +48,13 @@ export const Banner = () => {
   const totalPages = postData.totalPages || 1;
   const handleSearch = (e) => {
     e.preventDefault();
-    setPage(1); // Reset to first page when searching
+    setPage(1); 
     refetch();
   };
 
   const handleTagClick = (tagName) => {
     setSearchTag(tagName);
+    // activeTag(tagName);
     setPage(1);
     refetch();
   };
@@ -180,84 +182,108 @@ export const Banner = () => {
               <Loader />
             ) : (
               <>
-                {" "}
-                <div className="space-y-6">
-                  {posts.map((post) => (
+                {posts.length === 0 ? (
+                  <>
                     <motion.div
-                      key={post._id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+                      className="bg-white rounded-2xl shadow-md border border-gray-200 px-6 py-10  text-center"
                     >
-                      <Link to={`/post/${post._id}`}>
-                        <div className="p-6">
-                          {/* Author Info */}
-                          <div className="flex items-center gap-3 mb-4">
-                            <img
-                              src={post.image}
-                              alt="Author"
-                              referrerPolicy="no-referrer"
-                              className="w-10 h-10 rounded-full object-cover border-2 border-[#6D7CFF]/30"
-                            />
-                            <div>
-                              <h3 className="font-semibold">{post.name}</h3>
-                              <p className="text-sm text-gray-500">
-                                {new Date(post.createdAt).toLocaleDateString(
-                                  "en-US",
-                                  {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "numeric",
-                                  }
-                                )}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Post Content */}
-                          <div className="mb-4">
-                            <h2 className="text-xl font-bold mb-2 text-gray-800 hover:text-[#6D7CFF] transition-colors">
-                              {post.title}
-                            </h2>
-                            <p className="mb-2 text-gray-600">
-                              {post.description || "No description provided"}
-                            </p>
-                            <div className="flex flex-wrap gap-2">
-                              {post.tags.map((tag, i) => (
-                                <span
-                                  key={i}
-                                  className="px-3 py-1 bg-[#6D7CFF]/10 text-[#6D7CFF] text-sm rounded-full"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Engagement Metrics */}
-                          <div className="flex items-center gap-4 text-gray-600">
-                            <div className="flex items-center gap-1">
-                              <FaThumbsUp className="text-green-500" />
-                              <span>{post.upVote}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <FaThumbsDown className="text-red-500" />
-                              <span>{post.downVote}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <FaComment className="text-[#6D7CFF]" />
-                              <span>{post.commentCount}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <FaChartBar className="text-[#A167FF]" />
-                              <span>Score: {post.upVote - post.downVote}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </Link>
+                      <div className="flex justify-center mb-4 text-gray-400 text-5xl">
+                        <FaRegSadTear />
+                      </div>
+                      <h1 className="text-2xl font-semibold text-gray-800 mb-2">
+                        No Post Found
+                      </h1>
+                      <p className="text-gray-500">
+                        Sorry, we couldn't find any post with that tag or
+                        keyword. Try searching with different terms.
+                      </p>
                     </motion.div>
-                  ))}
-                </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="space-y-6">
+                      {posts.map((post) => (
+                        <motion.div
+                          key={post._id}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+                        >
+                          <Link to={`/post/${post._id}`}>
+                            <div className="p-6">
+                              {/* Author Info */}
+                              <div className="flex items-center gap-3 mb-4">
+                                <img
+                                  src={post.image}
+                                  alt="Author"
+                                  referrerPolicy="no-referrer"
+                                  className="w-10 h-10 rounded-full object-cover border-2 border-[#6D7CFF]/30"
+                                />
+                                <div>
+                                  <h3 className="font-semibold">{post.name}</h3>
+                                  <p className="text-sm text-gray-500">
+                                    {new Date(
+                                      post.createdAt
+                                    ).toLocaleDateString("en-US", {
+                                      year: "numeric",
+                                      month: "short",
+                                      day: "numeric",
+                                    })}
+                                  </p>
+                                </div>
+                              </div>
+
+                              {/* Post Content */}
+                              <div className="mb-4">
+                                <h2 className="text-xl font-bold mb-2 text-gray-800 hover:text-[#6D7CFF] transition-colors">
+                                  {post.title}
+                                </h2>
+                                <p className="mb-2 text-gray-600">
+                                  {post.description ||
+                                    "No description provided"}
+                                </p>
+                                <div className="flex flex-wrap gap-2">
+                                  {post.tags.map((tag, i) => (
+                                    <span
+                                      key={i}
+                                      className="px-3 py-1 bg-[#6D7CFF]/10 text-[#6D7CFF] text-sm rounded-full"
+                                    >
+                                      {tag}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Engagement Metrics */}
+                              <div className="flex items-center gap-4 text-gray-600">
+                                <div className="flex items-center gap-1">
+                                  <FaThumbsUp className="text-green-500" />
+                                  <span>{post.upVote}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <FaThumbsDown className="text-red-500" />
+                                  <span>{post.downVote}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <FaComment className="text-[#6D7CFF]" />
+                                  <span>{post.commentCount}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <FaChartBar className="text-[#A167FF]" />
+                                  <span>
+                                    Score: {post.upVote - post.downVote}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </>
+                )}
               </>
             )}
 
@@ -285,7 +311,7 @@ export const Banner = () => {
 
           {/* Announcement Sidebar */}
           <div className="lg:w-80 flex-shrink-0">
-            <TagsSection onTagClick={handleTagClick} />
+            <TagsSection onTagClick={handleTagClick} activeTag={searchTag} />
             <AnnouncementList />
           </div>
         </div>

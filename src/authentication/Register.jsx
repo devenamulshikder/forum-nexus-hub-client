@@ -81,7 +81,6 @@ export const Register = () => {
   };
 
   const handleFacebookLogin = () => {
-    console.log("Facebook login clicked");
     // Add your Facebook authentication logic here
     toast.info("Facebook login not implemented yet.");
   };

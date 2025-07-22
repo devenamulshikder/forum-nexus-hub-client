@@ -133,7 +133,9 @@ const PostDetails = () => {
             <div className="flex items-center gap-4">
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                onClick={() => voteMutation.mutate("up")}
+                onClick={() => {
+                  user && voteMutation.mutate("up");
+                }}
                 className={`flex items-center gap-2 ${
                   voteMutation.variables === "up"
                     ? "text-green-500"
@@ -158,7 +160,9 @@ const PostDetails = () => {
 
               <motion.button
                 whileTap={{ scale: 0.95 }}
-                onClick={() => voteMutation.mutate("down")}
+                onClick={() => {
+                  user && voteMutation.mutate("down");
+                }}
                 className={`flex items-center gap-2 ${
                   voteMutation.variables === "down"
                     ? "text-red-500"
@@ -176,14 +180,14 @@ const PostDetails = () => {
                 <span className="hidden sm:inline">Save</span>
               </button>
 
-              <FacebookShareButton url={shareUrl} quote={title}>
+              <FacebookShareButton url={user && shareUrl} quote={title}>
                 <div className="flex items-center gap-2 text-gray-500 hover:text-[#4267B2]">
                   <FaFacebook />
                   <span className="hidden sm:inline">Share</span>
                 </div>
               </FacebookShareButton>
 
-              <TwitterShareButton url={shareUrl} title={title}>
+              <TwitterShareButton url={user && shareUrl} title={title}>
                 <div className="flex items-center gap-2 text-gray-500 hover:text-[#1DA1F2]">
                   <FaTwitter />
                   <span className="hidden sm:inline">Tweet</span>

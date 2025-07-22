@@ -36,10 +36,8 @@ export const router = createBrowserRouter([
       },
       {
         path: "/post/:id",
-        element:<PrivateRoute>
-          <PostDetails/>
-        </PrivateRoute>
-      }
+        element: <PostDetails />,
+      },
     ],
   },
   {
@@ -80,9 +78,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "make-announcement",
-        element: <AdminRoute>
-          <MakeAnnouncement/>
-        </AdminRoute>
+        element: (
+          <AdminRoute>
+            <MakeAnnouncement />
+          </AdminRoute>
+        ),
       },
     ],
   },

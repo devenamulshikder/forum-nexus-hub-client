@@ -35,8 +35,6 @@ export const MyProfile = () => {
   if (userLoading || postsLoading) {
     return <Loader />;
   }
-  console.log("userInfo:", userInfo);
-  console.log("recentPosts:", recentPosts);
 
   return (
     <motion.div

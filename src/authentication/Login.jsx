@@ -68,7 +68,6 @@ export const Login = () => {
   };
 
   const handleFacebookLogin = () => {
-    console.log("Facebook login clicked");
     // Add Facebook authentication logic here
   };
 
