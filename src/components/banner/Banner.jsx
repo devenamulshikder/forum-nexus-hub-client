@@ -12,6 +12,7 @@ import {
   FaComment,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { TagsSection } from "../tagsSection/TagsSection";
 
 export const Banner = () => {
   const axiosSecure = useAxiosSecure();
@@ -41,6 +42,12 @@ export const Banner = () => {
     e.preventDefault();
     refetch();
   };
+
+    const handleTagClick = (tagName) => {
+      setSearchTag(tagName);
+      setPage(1);
+      refetch();
+    };
 
   // if (isPending) {
   //   return <Loader />;
@@ -129,7 +136,7 @@ export const Banner = () => {
 
             {/* Posts Grid */}
             {isPending ? (
-              <Loader  />
+              <Loader />
             ) : (
               <>
                 {" "}
@@ -235,6 +242,7 @@ export const Banner = () => {
 
           {/* Announcement Sidebar */}
           <div className="lg:w-80 flex-shrink-0">
+            <TagsSection onTagClick={handleTagClick} />
             <AnnouncementList />
           </div>
         </div>
