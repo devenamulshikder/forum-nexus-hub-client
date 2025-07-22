@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { Loader } from "../shared/Loader";
@@ -17,19 +17,26 @@ import { TagsSection } from "../tagsSection/TagsSection";
 export const Banner = () => {
   const axiosSecure = useAxiosSecure();
   const [searchTag, setSearchTag] = useState("");
+  const [debouncedSearchTag, setDebouncedSearchTag] = useState("");
   const [sort, setSort] = useState("newest");
   const [page, setPage] = useState(1);
   const limit = 5;
-
+  // Debounce effect (300ms delay)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTag(searchTag);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchTag]);
   const {
     data: postData = {},
     refetch,
     isPending,
   } = useQuery({
-    queryKey: ["post", searchTag, sort, page],
+    queryKey: ["post", debouncedSearchTag, sort, page],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/post?tag=${searchTag}&sort=${sort}&page=${page}&limit=${limit}`
+        `/post?tag=${debouncedSearchTag}&sort=${sort}&page=${page}&limit=${limit}`
       );
       return res.data;
     },
@@ -40,18 +47,15 @@ export const Banner = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    setPage(1); // Reset to first page when searching
     refetch();
   };
 
-    const handleTagClick = (tagName) => {
-      setSearchTag(tagName);
-      setPage(1);
-      refetch();
-    };
-
-  // if (isPending) {
-  //   return <Loader />;
-  // }
+  const handleTagClick = (tagName) => {
+    setSearchTag(tagName);
+    setPage(1);
+    refetch();
+  };
 
   return (
     <section className="bg-gradient-to-br from-[#F8F9FF] to-[#EBEDFA] py-12 px-4 md:px-6">
@@ -81,7 +85,7 @@ export const Banner = () => {
               </div>
               <input
                 type="text"
-                placeholder="Search by tag..."
+                placeholder="Search by full tag name..."
                 value={searchTag}
                 onChange={(e) => setSearchTag(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#6D7CFF] focus:border-transparent"
@@ -94,6 +98,45 @@ export const Banner = () => {
               Search
             </button>
           </motion.form>
+          {/* Display search results info */}
+          {searchTag && (
+            <div className="text-center mb-6">
+              {posts.length === 0 && !isPending ? (
+                <>
+                  <p className="text-gray-500 mt-2">
+                    No posts found with this tag{" "}
+                    <span className="font-medium">"{searchTag}"</span>
+                    <span
+                      className="text-[#6D7CFF] cursor-pointer ml-2 hover:underline"
+                      onClick={() => {
+                        setSearchTag("");
+                        refetch();
+                      }}
+                    >
+                      Clear search
+                    </span>
+                  </p>
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <p className="text-md text-gray-500">
+                    Showing results for tag:{" "}
+                    <span className="font-medium">"{searchTag}"</span>
+                    <span
+                      className="text-[#6D7CFF] cursor-pointer ml-2 hover:underline"
+                      onClick={() => {
+                        setSearchTag("");
+                        refetch();
+                      }}
+                    >
+                      Clear search
+                    </span>
+                  </p>
+                </>
+              )}
+            </div>
+          )}
         </motion.div>
 
         <div className="flex flex-col lg:flex-row gap-8">
@@ -105,8 +148,6 @@ export const Banner = () => {
                 Latest Discussions
               </h2>
               <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
                 onClick={() => {
                   setSort((prev) =>
                     prev === "popular" ? "newest" : "popular"
