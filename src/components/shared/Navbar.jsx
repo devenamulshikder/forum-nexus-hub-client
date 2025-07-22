@@ -135,39 +135,78 @@ export const Navbar = () => {
                   }}
                 />
                 <div className="dropdown dropdown-end">
+                  {/* Avatar Button */}
                   <div
                     tabIndex={0}
                     role="button"
-                    className="btn btn-ghost btn-circle avatar"
+                    className="btn btn-ghost btn-circle avatar hover:bg-gray-100 transition-colors duration-200"
                     data-tooltip-id="profile-tooltip"
                     data-tooltip-content={user?.displayName || "User Profile"}
                   >
-                    <div className="w-10 rounded-full">
+                    <div className="w-10 rounded-full ring-2 ring-transparent hover:ring-blue-200 transition-all duration-200">
                       <img
                         alt="user photo"
                         referrerPolicy="no-referrer"
                         src={user?.photoURL || "https://via.placeholder.com/40"}
+                        className="rounded-full object-cover"
                       />
                     </div>
                   </div>
+
+                  {/* Dropdown Menu */}
                   <ul
                     tabIndex={0}
-                    className="menu menu-sm dropdown-content bg-white rounded-box z-1 mt-3 w-40 p-2 shadow"
+                    className="menu menu-sm dropdown-content bg-white rounded-lg z-50 mt-3 w-48 p-2 shadow-lg border border-gray-100"
                   >
-                    <p className="ml-2 text-gray-500">
-                      {user?.displayName || "User"}
-                    </p>
+                    {/* User Name */}
+                    <div className="px-2 py-1 mb-1">
+                      <p className="text-sm font-medium text-gray-700 truncate">
+                        {user?.displayName || "User"}
+                      </p>
+                    </div>
+
+                    <div className="border-t border-gray-100 my-1"></div>
+
                     <li>
-                      <Link to="/dashboard" className="text-[15px] font-medium">
+                      <Link
+                        to="/dashboard"
+                        className="text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md transition-colors duration-150"
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"
+                          />
+                        </svg>
                         Dashboard
                       </Link>
                     </li>
+
                     <li>
                       <button
                         onClick={handleLogOut}
-                        to="/dashboard"
-                        className="text-[15px] font-medium"
+                        className="text-sm font-medium text-red-600 hover:bg-red-50 rounded-md transition-colors duration-150 w-full text-left"
                       >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                          />
+                        </svg>
                         Sign Out
                       </button>
                     </li>

@@ -65,7 +65,7 @@ export const MyProfile = () => {
               <h2 className="text-2xl font-bold text-gray-800">
                 {userInfo?.name || "Anonymous User"}
               </h2>
-              {userInfo?.isAdmin && (
+              {userInfo?.role === "admin" && (
                 <span className="flex items-center gap-1 bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-semibold">
                   <FaUserShield /> Admin
                 </span>
@@ -73,24 +73,26 @@ export const MyProfile = () => {
             </div>
             <p className="text-gray-600 mb-4">{userInfo?.email}</p>
             <div className="flex flex-wrap gap-2">
-              {/* Bronze Badge */}
-              <motion.div
-                whileHover={{ y: -2 }}
-                className="flex items-center gap-1 bg-gradient-to-br from-yellow-300 to-yellow-400 px-3 py-1 rounded-full text-white text-sm font-semibold shadow-sm"
-              >
-                <FaMedal className="text-orange-600" />
-                Bronze Member
-              </motion.div>
-
               {/* Gold Badge (conditional) */}
-              {userInfo?.isMember && (
+              {userInfo?.isMember ? (
                 <motion.div
                   whileHover={{ y: -2 }}
                   className="flex items-center gap-1 bg-gradient-to-br from-yellow-500 to-yellow-600 px-3 py-1 rounded-full text-white text-sm font-semibold shadow-sm"
                 >
-                  <FaMedal className="text-white" />
+                  <FaMedal className="text-orange-600" />
                   Premium Member
                 </motion.div>
+              ) : (
+                <>
+                  {/* Bronze Badge */}
+                  <motion.div
+                    whileHover={{ y: -2 }}
+                    className="flex items-center gap-1 bg-gradient-to-br from-yellow-300 to-yellow-400 px-3 py-1 rounded-full text-white text-sm font-semibold shadow-sm"
+                  >
+                    <FaMedal className="text-white" />
+                    Bronze Member
+                  </motion.div>
+                </>
               )}
             </div>
           </div>

@@ -74,7 +74,6 @@ export const AddPost = () => {
   if (isLoading) {
     return <Loader />;
   }
-
   if (myPosts.length >= 5 && !user?.premiumMember) {
     return (
       <motion.div
