@@ -16,7 +16,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { Loader } from "../../components";
 import { AuthContext } from "../../provider/AuthProvider";
 
-const PostDetails = () => {
+export const PostDetails = () => {
   const { id } = useParams();
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
@@ -312,5 +312,3 @@ const PostDetails = () => {
     </motion.div>
   );
 };
-
-export default PostDetails;

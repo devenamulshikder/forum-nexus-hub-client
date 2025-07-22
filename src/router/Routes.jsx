@@ -7,14 +7,15 @@ import {
   Home,
   MakeAnnouncement,
   ManageUsers,
+  MembershipPage,
   MyPosts,
   MyProfile,
+  PostDetails,
 } from "../pages";
 import { Login, Register } from "../authentication";
 import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
 import AdminRoute from "./AdminRoute";
-import PostDetails from "../pages/postDetails/PostDetails";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +38,14 @@ export const router = createBrowserRouter([
       {
         path: "/post/:id",
         element: <PostDetails />,
+      },
+      {
+        path: "/membership",
+        element: (
+          <PrivateRoute>
+            <MembershipPage />
+          </PrivateRoute>
+        ),
       },
     ],
   },
