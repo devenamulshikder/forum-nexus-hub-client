@@ -106,7 +106,7 @@ export const MyProfile = () => {
           className="bg-white p-4 rounded-xl shadow-sm border border-gray-200"
         >
           <h3 className="text-sm font-medium text-gray-500 mb-1">
-            Total Posts
+            Recent Posts
           </h3>
           <p className="text-3xl font-bold text-[#6D7CFF]">
             {/* {userInfo?.postCount || 0} */}
@@ -167,7 +167,7 @@ export const MyProfile = () => {
                 className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
               >
                 <div className="flex justify-between items-start">
-                  <Link to={`/posts/${post._id}`} className="group flex-1">
+                  <Link to={`/post/${post._id}`} className="group flex-1">
                     <h4 className="font-semibold text-gray-800 group-hover:text-[#6D7CFF] transition-colors flex items-center gap-1">
                       {post.title}
                       <FiExternalLink className="text-xs opacity-0 group-hover:opacity-100 transition-opacity" />

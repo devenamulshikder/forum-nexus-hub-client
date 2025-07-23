@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import { useContext, useRef, useState } from "react";
+import { use, useRef, useState } from "react";
 import {
   FaTrash,
   FaComment,
   FaEdit,
   FaThumbsUp,
-  FaThumbsDown,
   FaPlusCircle,
 } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
@@ -16,10 +15,6 @@ import { Link } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { AuthContext } from "../../provider/AuthProvider";
 import { Loader } from "../../components";
-import "primeicons/primeicons.css";
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-import "primereact/resources/primereact.min.css";
-
 import { Toast } from "primereact/toast";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
@@ -27,7 +22,7 @@ import "primereact/resources/primereact.min.css";
 
 export const MyPosts = () => {
   const axiosSecure = useAxiosSecure();
-  const { user } = useContext(AuthContext);
+  const { user } = use(AuthContext);
   const [deletingId, setDeletingId] = useState(null);
   const toast = useRef(null);
 
@@ -81,7 +76,7 @@ export const MyPosts = () => {
       setDeletingId(null);
     }
   };
-
+  console.log(myPosts);
   if (isLoading) {
     return <Loader />;
   }
@@ -139,101 +134,117 @@ export const MyPosts = () => {
           </Link>
         </motion.div>
       ) : (
-        <div className="space-y-6">
-          {myPosts.map((post) => (
-            <motion.div
-              key={post._id}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
-              className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
-            >
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <Link to={`/posts/${post._id}`} className="group">
-                    <h3 className="text-xl font-semibold text-gray-800 group-hover:text-[#6D7CFF] transition-colors flex items-center gap-2">
-                      {post.title}
-                      <FiExternalLink className="text-sm opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </h3>
-                  </Link>
-                  <span className="text-sm text-gray-500">
-                    {new Date(post.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-
-                <p className="text-gray-600 mb-6 line-clamp-2">
-                  {post.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {post.tags?.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1 text-gray-600">
-                      <FaThumbsUp className="text-green-500" />
-                      <span>{post.upVote || 0}</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-gray-600">
-                      <FaThumbsDown className="text-red-500" />
-                      <span>{post.downVote || 0}</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-gray-600">
-                      <FaComment className="text-blue-500" />
-                      <span>{post.commentCount || 0}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <Link
-                      to={`/dashboard/edit-post/${post._id}`}
-                      className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-                    >
-                      <FaEdit />
-                      Edit
-                    </Link>
-                    <button
-                      onClick={() => handleDeleteConfirm(post._id)}
-                      disabled={deletingId === post._id}
-                      className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors disabled:opacity-50"
-                    >
-                      {deletingId === post._id ? (
-                        <svg
-                          className="animate-spin h-4 w-4 text-red-600"
-                          viewBox="0 0 24 24"
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gradient-to-r from-[#6D7CFF] to-[#A167FF]">
+                <tr>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                  >
+                    Post Title
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                  >
+                    Votes
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
+                  >
+                    Date
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-right text-xs font-medium text-white uppercase tracking-wider"
+                  >
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {myPosts.map((post) => (
+                  <motion.tr
+                    key={post._id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.2 }}
+                    className="hover:bg-gray-50"
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <Link
+                        to={`/post/${post._id}`}
+                        className="group flex items-center"
+                      >
+                        <span className="text-sm font-medium text-gray-900 group-hover:text-[#6D7CFF]">
+                          {post.title}
+                        </span>
+                        <FiExternalLink className="ml-2 text-xs opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </Link>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-1 text-green-500">
+                          <FaThumbsUp className="text-sm" />
+                          <span className="text-sm">{post.upVote || 0}</span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(post.createdAt).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex justify-end gap-2">
+                        <Link
+                          // to={`/dashboard/edit-post/${post._id}`}
+                          className="text-[#6D7CFF] hover:text-[#5A6BFF] p-2 rounded-lg hover:bg-[#6D7CFF]/10"
                         >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                          ></circle>
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                          ></path>
-                        </svg>
-                      ) : (
-                        <FaTrash />
-                      )}
-                      {deletingId === post._id ? "Deleting..." : "Delete"}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+                          <FaEdit />
+                        </Link>
+                        <Link
+                          to={`/comment/${post._id}`}
+                          className="text-blue-500 hover:text-blue-700 p-2 rounded-lg hover:bg-blue-500/10"
+                        >
+                          <FaComment />
+                        </Link>
+                        <button
+                          onClick={() => handleDeleteConfirm(post._id)}
+                          disabled={deletingId === post._id}
+                          className="text-red-500 hover:text-red-700 p-2 rounded-lg hover:bg-red-500/10 disabled:opacity-50"
+                        >
+                          {deletingId === post._id ? (
+                            <svg
+                              className="animate-spin h-4 w-4 text-red-500"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
+                            </svg>
+                          ) : (
+                            <FaTrash />
+                          )}
+                        </button>
+                      </div>
+                    </td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </motion.div>

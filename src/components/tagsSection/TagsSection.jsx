@@ -92,20 +92,6 @@ export const TagsSection = ({ onTagClick, activeTag = null }) => {
           </p>
         )}
       </div>
-
-      {activeTag && (
-        <div className="mt-4 flex flex-col justify-between bg-[#6D7CFF]/10 p-3 rounded-lg">
-          <span className="font-medium text-[#6D7CFF]">
-            Viewing posts tagged: <strong>#{activeTag}</strong>
-          </span>
-          <button
-            onClick={() => onTagClick(null)}
-            className="text-sm text-[#6D7CFF] hover:underline flex items-center gap-1"
-          >
-            <FaTimes /> Clear filter
-          </button>
-        </div>
-      )}
     </motion.section>
   );
 };

@@ -50,6 +50,7 @@ export const Banner = () => {
     setPage(1);
     refetch();
   };
+  console.log(posts);
   const handleTagClick = (tagName) => {
     setSearchTag(tagName);
     setPage(1);
@@ -249,13 +250,12 @@ export const Banner = () => {
                                   <FaThumbsDown className="text-red-500" />
                                   <span>{post.downVote}</span>
                                 </div>
-                                <Link
-                                  to={`/comment/${post._id}`}
+                                <div
                                   className="flex items-center gap-1"
                                 >
                                   <FaComment className="text-[#6D7CFF]" />
                                   <span>{post.commentCount}</span>
-                                </Link>
+                                </div>
                                 <div className="flex items-center gap-1">
                                   <FaChartBar className="text-[#A167FF]" />
                                   <span>
