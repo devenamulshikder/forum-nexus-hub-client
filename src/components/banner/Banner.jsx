@@ -23,7 +23,6 @@ export const Banner = () => {
   const [sort, setSort] = useState("newest");
   const [page, setPage] = useState(1);
   const limit = 5;
-  // Debounce effect (300ms delay)
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchTag(searchTag);
@@ -51,10 +50,8 @@ export const Banner = () => {
     setPage(1); 
     refetch();
   };
-
   const handleTagClick = (tagName) => {
     setSearchTag(tagName);
-    // activeTag(tagName);
     setPage(1);
     refetch();
   };
@@ -266,10 +263,13 @@ export const Banner = () => {
                                   <FaThumbsDown className="text-red-500" />
                                   <span>{post.downVote}</span>
                                 </div>
-                                <div className="flex items-center gap-1">
+                                <Link
+                                  to={`/comment/${post._id}`}
+                                  className="flex items-center gap-1"
+                                >
                                   <FaComment className="text-[#6D7CFF]" />
                                   <span>{post.commentCount}</span>
-                                </div>
+                                </Link>
                                 <div className="flex items-center gap-1">
                                   <FaChartBar className="text-[#A167FF]" />
                                   <span>

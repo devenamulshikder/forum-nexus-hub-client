@@ -3,6 +3,7 @@ import Root from "../layouts/Root";
 import {
   AddPost,
   AdminProfile,
+  CommentDetails,
   ErrorPage,
   Home,
   MakeAnnouncement,
@@ -11,6 +12,7 @@ import {
   MyPosts,
   MyProfile,
   PostDetails,
+  ReportedComments,
 } from "../pages";
 import { Login, Register } from "../authentication";
 import PrivateRoute from "./PrivateRoute";
@@ -46,6 +48,10 @@ export const router = createBrowserRouter([
             <MembershipPage />
           </PrivateRoute>
         ),
+      },
+      {
+        path: "/comment/:postId",
+        element: <CommentDetails />,
       },
     ],
   },
@@ -90,6 +96,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <MakeAnnouncement />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "reported-content",
+        element: (
+          <AdminRoute>
+            <ReportedComments />
           </AdminRoute>
         ),
       },
