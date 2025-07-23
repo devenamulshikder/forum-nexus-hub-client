@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { AuthContext } from "../../provider/AuthProvider";
 import CommentModal from "./CommentModal";
+import { Loader } from "../../components";
 
 export const CommentDetails = () => {
   const { user } = use(AuthContext);
@@ -15,14 +16,17 @@ export const CommentDetails = () => {
   const [selectedFeedback, setSelectedFeedback] = useState({});
   const [activeComment, setActiveComment] = useState(null);
 
-  const { data: comments = [], refetch } = useQuery({
+  const {
+    data: comments = [],
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["comments", postId],
     queryFn: async () => {
       const res = await axiosSecure.get(`/comments/${postId}`);
       return res.data;
     },
   });
-
   const reportMutation = useMutation({
     mutationFn: ({ commentId, feedback }) =>
       axiosSecure.post("/reports", {
@@ -53,6 +57,9 @@ export const CommentDetails = () => {
       setSelectedFeedback((prev) => ({ ...prev, [commentId]: "" }));
     }
   };
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="max-w-6xl mx-auto p-6">

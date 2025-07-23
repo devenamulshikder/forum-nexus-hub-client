@@ -47,7 +47,7 @@ export const Banner = () => {
   const totalPages = postData.totalPages || 1;
   const handleSearch = (e) => {
     e.preventDefault();
-    setPage(1); 
+    setPage(1);
     refetch();
   };
   const handleTagClick = (tagName) => {
@@ -146,31 +146,17 @@ export const Banner = () => {
               <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-[#6D7CFF] to-[#A167FF] bg-clip-text text-transparent">
                 Latest Discussions
               </h2>
-              <motion.button
-                onClick={() => {
-                  setSort((prev) =>
-                    prev === "popular" ? "newest" : "popular"
-                  );
-                  refetch();
-                }}
-                className="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-shadow"
-              >
-                <span>
-                  Sort by: {sort === "popular" ? "Popularity" : "Newest"}
-                </span>
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+              <motion.button className="flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <select
+                  className="px-4"
+                  name="sort"
+                  id="sort"
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value)}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
+                  <option value="popular">Popularity</option>
+                  <option value="newest">Newest</option>
+                </select>
               </motion.button>
             </div>
 

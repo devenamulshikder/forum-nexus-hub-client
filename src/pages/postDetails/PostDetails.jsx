@@ -295,7 +295,7 @@ export const PostDetails = () => {
                         ).toLocaleString()}
                       </span>
                     </div>
-                    <p className="text-gray-700 whitespace-pre-line">
+                    <p className="text-gray-700 break-words whitespace-pre-wrap">
                       {comment.comment}
                     </p>
                   </div>
