@@ -1,29 +1,81 @@
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { useState } from "react";
+import { use, useState } from "react";
+import { AuthContext } from "../../provider/AuthProvider";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
-export const CheckoutForm = ({ plan, onSuccess, loading }) => {
+export const CheckoutForm = ({ plan }) => {
+  const { user } = use(AuthContext);
   const stripe = useStripe();
+  const axiosSecure = useAxiosSecure();
   const elements = useElements();
+  const [processing, setProcessing] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
+  const planDetails = {
+    monthly: {
+      name: "Monthly Premium",
+      price: 9.99,
+      period: "/month",
+      priceId: "price_monthly_premium", // Stripe price ID
+    },
+    yearly: {
+      name: "Yearly Premium",
+      price: 99.99,
+      period: "one-time",
+      priceId: "price_yearly_premium", // Stripe price ID
+    },
+  };
+  const currentPlan = planDetails[plan];
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) return;
+    setProcessing(true);
+    try {
+      const response = await axiosSecure.post("/create-payment-intent", {
+        planId: plan,
+        amount: Math.round(currentPlan.price * 100),
+        currency: "usd",
+      });
+      const { clientSecret, error: backendError } = response.data;
+      if (backendError) {
+        setError(backendError);
+        setProcessing(false);
+        return;
+      }
 
-    const { error: stripeError, paymentIntent } =
-      await stripe.confirmCardPayment("your_client_secret_from_backend", {
+      const cardElement = elements.getElement(CardElement);
+      const confirm = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
-          card: elements.getElement(CardElement),
+          card: cardElement,
+          billing_details: {
+            name: user?.displayName,
+            email: user?.email,
+          },
         },
       });
 
-    if (stripeError) {
-      setError(stripeError.message);
-    } else {
-      onSuccess(paymentIntent);
+      if (confirm.error) {
+        setError(confirm.error.message);
+        setProcessing(false);
+        toast.error("Payment succeeded but membership update failed");
+      } else if (confirm.paymentIntent.status === "succeeded") {
+        // setSucceeded(true);
+        setProcessing(false);
+        axiosSecure.patch(`/users/${user.email}/member`, {
+          isMember: true,
+        });
+      }
+      toast.success("Membership upgraded successfully!");
+      navigate("/dashboard");
+    } catch (err) {
+      setError(`An unexpected error occurred. Please try again.`, err);
+      toast.error("Payment succeeded but membership update failed");
+      setProcessing(false);
     }
   };
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="border border-gray-300 rounded-lg p-4">
@@ -49,12 +101,12 @@ export const CheckoutForm = ({ plan, onSuccess, loading }) => {
 
       <button
         type="submit"
-        disabled={!stripe || loading}
+        disabled={!stripe || processing}
         className={`w-full bg-gradient-to-r from-[#6D7CFF] to-[#A167FF] text-white py-3 rounded-lg font-medium ${
-          loading ? "opacity-70" : "hover:opacity-90"
+          processing ? "opacity-70" : "hover:opacity-90"
         } transition-opacity`}
       >
-        {loading
+        {processing
           ? "Processing..."
           : `Pay ${plan === "yearly" ? "$99" : "$9.99"}`}
       </button>

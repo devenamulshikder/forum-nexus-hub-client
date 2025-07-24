@@ -12,7 +12,6 @@ import { Loader } from "../../components";
 export const MyProfile = () => {
   const { user } = use(AuthContext);
   const axiosSecure = useAxiosSecure();
-
   // Get user info
   const { data: userInfo = {}, isLoading: userLoading } = useQuery({
     queryKey: ["userInfo", user?.email],

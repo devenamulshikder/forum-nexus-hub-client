@@ -9,12 +9,12 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { CheckoutForm } from "./CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
 
-const stripePromise = loadStripe("sk_test_BQokikJOvBiI2HlWgH4olfQ2");
+const stripePromise = loadStripe(
+  "pk_test_51PKmoA04L5nSMEQqqgrADEjX61IdiSsEex5dvt5sJpzTXigY4EOnNcxbN4TAX7PPeeZGLL1BbHlml1FEDnP2TzB000WZhbNC1O"
+);
 
 export const MembershipPage = () => {
   const { user } = use(AuthContext);
-  const axiosSecure = useAxiosSecure();
-  const [loading, setLoading] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("yearly");
 
   const plans = {
@@ -44,22 +44,6 @@ export const MembershipPage = () => {
         "Profile customization",
       ],
     },
-  };
-
-  const handlePaymentSuccess = async (paymentIntent) => {
-    try {
-      setLoading(true);
-      const res = await axiosSecure.patch(`/users/membership/${user.email}`);
-      if (res.data.success) {
-        toast.success("Membership upgraded successfully!");
-        // You might want to refresh user data here
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Payment succeeded but membership update failed");
-    } finally {
-      setLoading(false);
-    }
   };
 
   return (
@@ -183,12 +167,9 @@ export const MembershipPage = () => {
                   </div>
                 </div>
               </div>
-
               <Elements stripe={stripePromise}>
                 <CheckoutForm
                   plan={selectedPlan}
-                  onSuccess={handlePaymentSuccess}
-                  loading={loading}
                 />
               </Elements>
             </>

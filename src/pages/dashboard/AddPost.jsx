@@ -25,7 +25,14 @@ export const AddPost = () => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm();
-
+  const { data: userInfo = {} } = useQuery({
+    queryKey: ["userInfo", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/user?email=${user.email}`);
+      return res.data;
+    },
+  });
   const { data: myPosts = [], isLoading } = useQuery({
     queryKey: ["myPosts", user?.email],
     queryFn: async () => {
@@ -34,7 +41,6 @@ export const AddPost = () => {
     },
     enabled: !!user?.email,
   });
-
   const mutation = useMutation({
     mutationFn: (newPost) => axiosSecure.post("/posts", newPost),
     onSuccess: () => {
@@ -74,7 +80,7 @@ export const AddPost = () => {
   if (isLoading) {
     return <Loader />;
   }
-  if (myPosts.length >= 5 && !user?.premiumMember) {
+  if (myPosts.length >= 5 && !userInfo?.isMember) {
     return (
       <motion.div
         initial={{ opacity: 0 }}

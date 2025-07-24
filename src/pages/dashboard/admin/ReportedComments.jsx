@@ -19,7 +19,7 @@ export const ReportedComments = () => {
       toast.success(`Action completed: ${action}`);
       refetch();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Failed to perform action");
     }
   };
