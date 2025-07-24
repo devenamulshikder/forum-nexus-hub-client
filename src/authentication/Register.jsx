@@ -7,6 +7,7 @@ import { AuthContext } from "../provider/AuthProvider";
 import { toast } from "sonner";
 import { FaSpinner } from "react-icons/fa";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import axios from "axios";
 
 export const Register = () => {
   const axiosSecure = useAxiosSecure();
@@ -27,14 +28,15 @@ export const Register = () => {
       setLoading(true);
       const userCredential = await createUser(email, password);
       const user = userCredential.user;
-
-      // Update Firebase profile
       await updateUser(user, {
         displayName: fullName,
-        photo: photoURL,
+        photoURL: photoURL,
       });
-
-      // Save to MongoDB
+      setUser({
+        ...user,
+        displayName: fullName,
+        photoURL: photoURL,
+      });
       const saveUser = {
         name: fullName,
         email: email,
@@ -45,7 +47,10 @@ export const Register = () => {
         isAdmin: false,
       };
 
-      await axiosSecure.post("/users", saveUser);
+      await axios.post(
+        "https://forum-nexus-hub-server.vercel.app/users",
+        saveUser
+      );
 
       toast.success("Registered successfully!");
       navigate(location?.state ? location?.state : "/");
@@ -61,7 +66,6 @@ export const Register = () => {
     try {
       const result = await googleLogin();
       const user = result.user;
-
       const saveUser = {
         name: user.displayName,
         email: user.email,

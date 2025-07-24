@@ -7,6 +7,7 @@ import { use } from "react";
 import { AuthContext } from "../provider/AuthProvider";
 import { toast } from "sonner";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import axios from "axios";
 
 export const Login = () => {
   const axiosSecure = useAxiosSecure();
@@ -35,7 +36,10 @@ export const Login = () => {
         isAdmin: false,
       };
 
-      await axiosSecure.post("/users", saveUser);
+      await axios.post(
+        "https://forum-nexus-hub-server.vercel.app/users",
+        saveUser
+      );
 
       toast.success("Sign in user successfully!");
       navigate(location?.state ? location?.state : "/");
@@ -48,7 +52,6 @@ export const Login = () => {
     try {
       const result = await googleLogin();
       const user = result.user;
-
       const saveUser = {
         name: user.displayName,
         email: user.email,
@@ -58,7 +61,10 @@ export const Login = () => {
         role:'user',
         isAdmin:false
       };
-      await axiosSecure.post("/users", saveUser);
+      await axios.post(
+        "https://forum-nexus-hub-server.vercel.app/users",
+        saveUser
+      );
       toast.success("Login Successful");
       navigate("/");
     } catch (error) {

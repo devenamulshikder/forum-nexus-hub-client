@@ -154,8 +154,9 @@ export const AddPost = () => {
             </label>
             <div className="flex items-center gap-2">
               <img
-                src={user.photoURL}
+                src={user?.photoURL}
                 alt="User"
+                referrerPolicy="no-referrer"
                 className="w-8 h-8 rounded-full"
               />
               <span className="text-sm text-gray-500">

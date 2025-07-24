@@ -60,19 +60,19 @@ export const CheckoutForm = ({ plan }) => {
       if (confirm.error) {
         setError(confirm.error.message);
         setProcessing(false);
-        toast.error("Payment succeeded but membership update failed");
+        toast.error("Payment not succeeded and membership update failed");
       } else if (confirm.paymentIntent.status === "succeeded") {
         // setSucceeded(true);
         setProcessing(false);
         axiosSecure.patch(`/users/${user.email}/member`, {
           isMember: true,
         });
+        toast.success("Membership upgraded successfully!");
+        navigate("/dashboard");
       }
-      toast.success("Membership upgraded successfully!");
-      navigate("/dashboard");
     } catch (err) {
       setError(`An unexpected error occurred. Please try again.`, err);
-      toast.error("Payment succeeded but membership update failed");
+      toast.error("Payment not succeeded and membership update failed");
       setProcessing(false);
     }
   };

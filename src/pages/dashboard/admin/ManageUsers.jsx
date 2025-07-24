@@ -5,7 +5,6 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { toast } from "sonner";
 import { FaSearch, FaUserShield, FaCrown, FaUser, FaBan } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { Loader } from "../../../components";
 
 export const ManageUsers = () => {
   const axiosSecure = useAxiosSecure();
@@ -65,9 +64,7 @@ export const ManageUsers = () => {
       setActionLoading(null);
     }
   };
-//   if (isLoading) {
-//     return <Loader />;
-//   }
+  console.log(users);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -159,7 +156,7 @@ export const ManageUsers = () => {
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {user.subscription === "member" ? (
+                    {user.isMember ? (
                       <span className="flex items-center text-yellow-600">
                         <FaCrown className="mr-1" /> Premium
                       </span>

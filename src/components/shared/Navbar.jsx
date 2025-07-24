@@ -25,7 +25,6 @@ export const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
   // Handle logout
   const handleLogOut = () => {
     logOutUser()
@@ -145,9 +144,9 @@ export const Navbar = () => {
                   >
                     <div className="w-10 rounded-full ring-2 ring-transparent hover:ring-blue-200 transition-all duration-200">
                       <img
+                        src={user?.photoURL || "https://via.placeholder.com/40"}
                         alt="user photo"
                         referrerPolicy="no-referrer"
-                        src={user?.photoURL || "https://via.placeholder.com/40"}
                         className="rounded-full object-cover"
                       />
                     </div>
