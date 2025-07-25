@@ -53,9 +53,9 @@ export const AddPost = () => {
 
   const onSubmit = async (data) => {
     const post = {
-      image: user.photoURL,
-      name: user.displayName,
-      email: user.email,
+      image: user?.photoURL,
+      name: user?.displayName,
+      email: user?.email,
       title: data.title,
       description: data.description,
       tags: data.tags.map((tag) => tag.value),
@@ -63,6 +63,7 @@ export const AddPost = () => {
     };
     await mutation.mutateAsync(post);
   };
+  console.log(userInfo);
 
   const { data: allTags = [] } = useQuery({
     queryKey: ["tags"],
@@ -133,7 +134,7 @@ export const AddPost = () => {
               Author
             </label>
             <input
-              defaultValue={user.displayName}
+              defaultValue={user?.displayName}
               readOnly
               className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#6D7CFF]/50"
             />
@@ -143,7 +144,7 @@ export const AddPost = () => {
               Email
             </label>
             <input
-              defaultValue={user.email}
+              defaultValue={user?.email}
               readOnly
               className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#6D7CFF]/50"
             />

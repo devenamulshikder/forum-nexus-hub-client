@@ -25,11 +25,10 @@ export const Login = () => {
       setLoading(true);
       const result = await signInUser(data?.email, data?.password);
       const user = result.user;
-
       const saveUser = {
-        name: user.displayName || "Anonymous",
-        email: user.email,
-        photo: user.photoURL || null,
+        name: user?.displayName || "Anonymous",
+        email: user?.email,
+        photo: user?.photoURL || null,
         badge: "bronze",
         isMember: false,
         role: "user",
@@ -53,9 +52,9 @@ export const Login = () => {
       const result = await googleLogin();
       const user = result.user;
       const saveUser = {
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
+        name: user?.displayName,
+        email: user?.email,
+        photo: user?.photoURL,
         badge: "bronze",
         isMember: false,
         role:'user',
