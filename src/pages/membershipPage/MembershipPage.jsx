@@ -55,6 +55,7 @@ export const MembershipPage = () => {
     >
       {/* Hero Section */}
       <div className="text-center mb-12">
+        <title>Forum Nexus Hub | Membership Plans</title>
         <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center rounded-[15px] bg-gradient-to-br from-[#6D7CFF] to-[#A167FF]">
           <FaCrown className="text-white text-3xl" />
         </div>
@@ -168,9 +169,7 @@ export const MembershipPage = () => {
                 </div>
               </div>
               <Elements stripe={stripePromise}>
-                <CheckoutForm
-                  plan={selectedPlan}
-                />
+                <CheckoutForm plan={selectedPlan} />
               </Elements>
             </>
           ) : (

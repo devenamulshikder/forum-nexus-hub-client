@@ -102,6 +102,7 @@ const DashboardLayout = () => {
           sidebarOpen ? "w-64" : "w-20"
         } bg-white shadow-md transition-all duration-300 flex flex-col`}
       >
+        <title>Forum Nexus Hub | Dashboard</title>
         <div className="p-4 flex items-center justify-between border-b border-gray-300">
           {sidebarOpen ? (
             <Link to={"/"}>

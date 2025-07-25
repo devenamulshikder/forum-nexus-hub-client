@@ -5,10 +5,10 @@ A modern, full-stack forum application built with the MERN stack that enables us
 
 ## 🚀 Live Demo
 
-**Frontend:** [Forum Nexus Hub Live](your-live-url-here)  
+**Frontend:** [Forum Nexus Hub Live](https://forum-nexus-hub.netlify.app/)  
 **Admin Credentials:**
 - Email: admin@forumnexus.com
-- Password: admin123
+- Password: Admin123
 
 ## 📋 Table of Contents
 
