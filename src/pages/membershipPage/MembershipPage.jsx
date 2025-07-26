@@ -8,15 +8,24 @@ import { loadStripe } from "@stripe/stripe-js";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { CheckoutForm } from "./CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
+import { useQuery } from "@tanstack/react-query";
 
 const stripePromise = loadStripe(
   "pk_test_51PKmoA04L5nSMEQqqgrADEjX61IdiSsEex5dvt5sJpzTXigY4EOnNcxbN4TAX7PPeeZGLL1BbHlml1FEDnP2TzB000WZhbNC1O"
 );
 
 export const MembershipPage = () => {
+  const axiosSecure = useAxiosSecure();
   const { user } = use(AuthContext);
   const [selectedPlan, setSelectedPlan] = useState("yearly");
-
+    const { data: userInfo = {}, } = useQuery({
+      queryKey: ["userInfo", user?.email],
+      enabled: !!user?.email,
+      queryFn: async () => {
+        const res = await axiosSecure.get(`/user?email=${user.email}`);
+        return res.data;
+      },
+    });
   const plans = {
     monthly: {
       name: "Monthly Membership",
@@ -157,13 +166,13 @@ export const MembershipPage = () => {
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <div className="flex items-center gap-3">
                   <img
-                    src={user.photoURL}
-                    alt={user.displayName}
+                    src={userInfo.photo}
+                    alt={userInfo.name}
                     className="w-10 h-10 rounded-full"
                     referrerPolicy="no-referrer"
                   />
                   <div>
-                    <h3 className="font-medium">{user.displayName}</h3>
+                    <h3 className="font-medium">{userInfo.name}</h3>
                     <p className="text-sm text-gray-500">{user.email}</p>
                   </div>
                 </div>

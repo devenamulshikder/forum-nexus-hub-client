@@ -44,6 +44,16 @@ export const Navbar = () => {
     },
   });
   const count = countData?.count || 0;
+
+    const { data: userInfo = {}, refetch  } = useQuery({
+      queryKey: ["userInfo", user?.email],
+      enabled: !!user?.email,
+      queryFn: async () => {
+        const res = await axiosSecure.get(`/user?email=${user.email}`);
+        return res.data;
+      },
+    });
+    refetch()
   return (
     <div
       className={`shadow-sm top-0 sticky z-50 transition-all duration-300 ${
@@ -140,11 +150,14 @@ export const Navbar = () => {
                     role="button"
                     className="btn btn-ghost btn-circle avatar hover:bg-gray-100 transition-colors duration-200"
                     data-tooltip-id="profile-tooltip"
-                    data-tooltip-content={user?.displayName || "User Profile"}
+                    data-tooltip-content={userInfo?.name || "User Profile"}
                   >
                     <div className="w-10 rounded-full ring-2 ring-transparent hover:ring-blue-200 transition-all duration-200">
                       <img
-                        src={user?.photoURL || "https://via.placeholder.com/40"}
+                        src={
+                          userInfo?.photo ||
+                          "https://via.placeholder.com/40"
+                        }
                         alt="user photo"
                         referrerPolicy="no-referrer"
                         className="rounded-full object-cover"
@@ -160,7 +173,7 @@ export const Navbar = () => {
                     {/* User Name */}
                     <div className="px-2 py-1 mb-1">
                       <p className="text-sm font-medium text-gray-700 truncate">
-                        {user?.displayName || "User"}
+                        {userInfo?.name || "User"}
                       </p>
                     </div>
 

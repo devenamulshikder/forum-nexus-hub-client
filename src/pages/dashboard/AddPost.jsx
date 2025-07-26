@@ -50,12 +50,11 @@ export const AddPost = () => {
       navigate("/dashboard/my-posts");
     },
   });
-
   const onSubmit = async (data) => {
     const post = {
-      image: user?.photoURL,
-      name: user?.displayName,
-      email: user?.email,
+      image: userInfo?.photo,
+      name: userInfo?.name,
+      email: userInfo?.email,
       title: data.title,
       description: data.description,
       tags: data.tags.map((tag) => tag.value),
@@ -63,7 +62,6 @@ export const AddPost = () => {
     };
     await mutation.mutateAsync(post);
   };
-  console.log(userInfo);
 
   const { data: allTags = [] } = useQuery({
     queryKey: ["tags"],
@@ -134,7 +132,7 @@ export const AddPost = () => {
               Author
             </label>
             <input
-              defaultValue={user?.displayName}
+              defaultValue={userInfo?.name || user?.displayName}
               readOnly
               className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#6D7CFF]/50"
             />
@@ -144,7 +142,7 @@ export const AddPost = () => {
               Email
             </label>
             <input
-              defaultValue={user?.email}
+              defaultValue={userInfo?.email}
               readOnly
               className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-[#6D7CFF]/50"
             />
@@ -155,7 +153,7 @@ export const AddPost = () => {
             </label>
             <div className="flex items-center gap-2">
               <img
-                src={user?.photoURL}
+                src={userInfo?.photo || "https://via.placeholder.com/40"}
                 alt="User"
                 referrerPolicy="no-referrer"
                 className="w-8 h-8 rounded-full"

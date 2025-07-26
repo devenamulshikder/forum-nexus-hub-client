@@ -55,7 +55,6 @@ export const Banner = () => {
     setPage(1);
     refetch();
   };
-
   return (
     <section className="bg-gradient-to-br from-[#F8F9FF] to-[#EBEDFA] py-12 px-4 md:px-6">
       <div className="max-w-7xl mx-auto">

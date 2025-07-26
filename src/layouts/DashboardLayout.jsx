@@ -35,6 +35,7 @@ const DashboardLayout = () => {
       return res.data;
     },
   });
+  console.log(userInfo);
   // Handle logout
   const handleLogOut = () => {
     logOutUser()
@@ -94,7 +95,6 @@ const DashboardLayout = () => {
   const navItems = [...(userInfo?.role === 'admin' ? adminNavItems : usersNavItems)];
 
   return (
-
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar - Maintains your exact styling */}
       <div
@@ -167,7 +167,7 @@ const DashboardLayout = () => {
               ?.name || "Dashboard"}
           </h1>
           <div className="flex items-center gap-4">
-            {userInfo?.role === 'admin' && (
+            {userInfo?.role === "admin" && (
               <span className="hidden sm:inline-flex items-center gap-1 bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
                 <FaUserShield size={14} /> Admin Mode
               </span>
@@ -176,7 +176,7 @@ const DashboardLayout = () => {
               <img
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
-                src={user?.photoURL}
+                src={userInfo?.photo || "https://via.placeholder.com/40"}
                 alt="User avatar"
               />
             </div>
@@ -187,7 +187,7 @@ const DashboardLayout = () => {
         <main className="p-6">
           {location.pathname === "/dashboard" ? (
             <>
-              {userInfo.role === 'admin' ? (
+              {userInfo.role === "admin" ? (
                 <>
                   <AdminDashboardWelcome />
                 </>

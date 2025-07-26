@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { toast } from "sonner";
 import { useContext } from "react";
@@ -12,7 +12,14 @@ export const MakeAnnouncement = () => {
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
-
+  const { data: userInfo = {}, } = useQuery({
+    queryKey: ["userInfo", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/user?email=${user.email}`);
+      return res.data;
+    },
+  });
   const {
     register,
     handleSubmit,
@@ -30,11 +37,10 @@ export const MakeAnnouncement = () => {
     },
     onError: () => toast.error("Failed to post announcement"),
   });
-
   const onSubmit = async (data) => {
     const announcement = {
-      image: user.photoURL,
-      name: user.displayName,
+      image: userInfo.photo,
+      name: userInfo.name,
       title: data.title,
       description: data.description,
       priority: data.priority,
@@ -63,13 +69,13 @@ export const MakeAnnouncement = () => {
           {/* Author Info */}
           <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
             <img
-              src={user?.photoURL || "/default-avatar.png"}
+              src={userInfo.photo || "/default-avatar.png"}
               alt="Author"
               className="w-12 h-12 rounded-full object-cover"
             />
             <div>
               <p className="font-medium text-gray-800">
-                {user?.displayName || "Admin"}
+                {userInfo.name || "Admin"}
               </p>
               <p className="text-sm text-gray-500">Posting as administrator</p>
             </div>

@@ -31,6 +31,14 @@ export const PostDetails = () => {
       return res.data;
     },
   });
+    const { data: userInfo = {}, } = useQuery({
+      queryKey: ["userInfo", user?.email],
+      enabled: !!user?.email,
+      queryFn: async () => {
+        const res = await axiosSecure.get(`/user?email=${user.email}`);
+        return res.data;
+      },
+    });
 
   // Vote mutation
   const voteMutation = useMutation({
@@ -44,10 +52,10 @@ export const PostDetails = () => {
       axiosSecure.post("/comments", {
         postId: id,
         postTitle: post.title,
-        email: user.email,
-        name: user.displayName,
+        email: userInfo.email,
+        name: userInfo.name,
         comment: commentText,
-        photo: user.photoURL,
+        photo: userInfo.photo,
       }),
     onSuccess: () => {
       setCommentText("");
@@ -217,8 +225,8 @@ export const PostDetails = () => {
             >
               <div className="flex items-start gap-3">
                 <img
-                  src={user.photoURL}
-                  alt={user.displayName}
+                  src={userInfo.photo}
+                  alt={userInfo.name}
                   className="w-10 h-10 rounded-full object-cover border-2 border-[#6D7CFF]/30"
                   referrerPolicy="no-referrer"
                 />
