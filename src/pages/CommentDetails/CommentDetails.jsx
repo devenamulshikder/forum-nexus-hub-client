@@ -27,14 +27,22 @@ export const CommentDetails = () => {
       return res.data;
     },
   });
+  const { data: userInfo = {} } = useQuery({
+    queryKey: ["userInfo", user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/user?email=${user.email}`);
+      return res.data;
+    },
+  });
   const reportMutation = useMutation({
     mutationFn: ({ commentId, feedback }) =>
       axiosSecure.post("/reports", {
         commentId,
         feedback,
-        reporterName: user?.displayName || "Anonymous",
+        reporterName: userInfo?.name || "Anonymous",
         reporterEmail: user?.email || "Anonymous",
-        reporterPhoto: user?.photoURL || "https://via.placeholder.com/150",
+        reporterPhoto: userInfo?.photo || "https://via.placeholder.com/150",
       }),
     onSuccess: () => {
       toast.success("Comment reported successfully");
