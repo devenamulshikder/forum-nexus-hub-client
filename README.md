@@ -126,7 +126,13 @@ To provide a scalable, secure, and user-friendly forum platform where communitie
 
 ### Frontend Setup
 
-1. **Clone the repository**
+1. **Clone the repository client side**
 ```bash
 git clone https://github.com/yourusername/forum-nexus-hub-client.git
 cd forum-nexus-hub-client
+```
+2. **Clone the repository server side**
+```bash
+git clone https://github.com/yourusername/forum-nexus-hub-client.git
+cd forum-nexus-hub-client
+```
