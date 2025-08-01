@@ -11,7 +11,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { useQuery } from "@tanstack/react-query";
 
 const stripePromise = loadStripe(
-  "pk_test_51PKmoA04L5nSMEQqqgrADEjX61IdiSsEex5dvt5sJpzTXigY4EOnNcxbN4TAX7PPeeZGLL1BbHlml1FEDnP2TzB000WZhbNC1O"
+  import.meta.env.VITE_STRIPE_API_KEY || "your-stripe-public-key-here"
 );
 
 export const MembershipPage = () => {
