@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const stripePromise = loadStripe(
   import.meta.env.VITE_STRIPE_API_KEY || "your-stripe-public-key-here"
+  
 );
 
 export const MembershipPage = () => {
