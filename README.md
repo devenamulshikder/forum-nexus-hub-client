@@ -8,7 +8,6 @@ A modern, full-stack forum application built with the MERN stack that enables us
 **Frontend:** [Forum Nexus Hub Live](https://forum-nexus-hub.netlify.app/)
 
 **Admin Credentials:**
-
 - Email: admin@forumnexus.com
 - Password: Admin123
 
@@ -133,8 +132,10 @@ To provide a scalable, secure, and user-friendly forum platform where communitie
 git clone https://github.com/devenamulshikder/forum-nexus-hub-client.git
 cd forum-nexus-hub-client
 ```
+### Backend Setup
+
 2. **Clone the repository server side**
 ```bash
-git clone https://github.com/yourusername/forum-nexus-hub-client.git
-cd forum-nexus-hub-client
+git clone https://github.com/devenamulshikder/forum-nexus-hub-server.git
+cd forum-nexus-hub-server
 ```
